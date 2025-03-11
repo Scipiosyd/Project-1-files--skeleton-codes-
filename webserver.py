@@ -1,13 +1,13 @@
 #import socket module
 from socket import *
 serverSocket = socket(AF_INET, SOCK_STREAM)
-serverPort = 6789
+serverPort = 6789   #C
 #Prepare a sever socket
-serverSocket.bind('0.0.0.0', serverPort)
+serverSocket.bind(('0.0.0.0', serverPort))  #C
 #Fill in start
 #Fill in end
 
-print(test2)
+serverSocket.listen(1)  #C
 
 
 
@@ -15,25 +15,34 @@ print(test2)
 while True:
     #Establish the connection
     print('Ready to serve...')
-    connectionSocket, addr =   #Fill in start              #Fill in end          
+    connectionSocket, addr = serverSocket.accept()  #Fill in start            #Fill in end 
+             
     try:
-        message =   #Fill in start          #Fill in end               
+            # 3.3DONE
+        message = connectionSocket.recv(1024).decode("UTF-8")   #Fill in start          #Fill in end               
         filename = message.split()[1]                 
         f = open(filename[1:])                        
-        outputdata = #Fill in start       #Fill in end                   
+        outputdata =  f.read() #Fill in start       #Fill in end 
+            #  3.4
         #Send one HTTP header line into socket
-        
+        connectionSocket.send("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n".encode()) 
+
         #Fill in start
         #Fill in end                
         
         #Send the content of the requested file to the client
         for i in range(0, len(outputdata)):           
-            	connectionSocket.send(outputdata[i].encode())
-        connectionSocket.send("\r\n".encode())
-        connectionSocket.close()
+            connectionSocket.send(outputdata[i].encode())
+            connectionSocket.send("\r\n".encode())
+            connectionSocket.close()
+    
     except IOError:
         #Send response message for file not found
         
+        connectionSocket.send("HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n".encode()) #C
+        connectionSocket.send("<html><body><h1>404 Not Found</h1></body></html>".encode()) #C
+
+        connectionSocket.close() #C
         #Fill in start        
         
         #Fill in end
