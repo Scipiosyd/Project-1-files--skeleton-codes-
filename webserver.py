@@ -7,6 +7,11 @@ serverSocket.bind('0.0.0.0', serverPort)
 #Fill in start
 #Fill in end
 
+print(test)
+
+
+
+
 while True:
     #Establish the connection
     print('Ready to serve...')
