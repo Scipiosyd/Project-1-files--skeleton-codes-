@@ -10,7 +10,7 @@ serverSocket.bind(('0.0.0.0', serverPort))  #C
 #Fill in end
 print(f"Server is running on port {serverPort}...")
 
-serverSocket.listen(1)  #C
+serverSocket.listen(1)  
 
 
 
@@ -24,14 +24,17 @@ while True:
             # 3.3DONE
         message = connectionSocket.recv(1024).decode("UTF-8")   #Fill in start          #Fill in end               
         filename = message.split()[1]                 
-        f = open(filename[1:], "r", encoding="utf-8")                        
-        outputdata =  f.read() #Fill in start       #Fill in end 
+        with open(filename[1:], "r", encoding="utf-8") as f:                        
+            outputdata =  f.read() #Fill in start       #Fill in end 
             #  3.4
         #Send one HTTP header line into socket
         connectionSocket.send("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n".encode()) 
 
         #Fill in start
-        #Fill in end                
+        #Fill in end       
+        # 
+        if not message:  
+            raise ConnectionAbortedError("Client disconnected unexpectedly.")         
         
         #Send the content of the requested file to the client
         for i in range(0, len(outputdata)):           
@@ -41,6 +44,11 @@ while True:
            
            
            # connectionSocket.close()
+
+    except (ConnectionResetError, ConnectionAbortedError) as e:
+        print(f"Connection error: {e}")
+        connectionSocket.close()
+        continue
     
     except IOError:
         #Send response message for file not found
@@ -77,5 +85,7 @@ while True:
         #Fill in start 
         #Fill in end 
                    
-    serverSocket.close()
-    sys.exit()#Terminate the program after sending the corresponding data                                    
+
+    #GOT RID OF THESE TWO LINES TO MAKE IT RUN INDEFINITELY
+    #serverSocket.close()   
+    #sys.exit()#Terminate the program after sending the corresponding data                                    
