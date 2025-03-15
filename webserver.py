@@ -14,6 +14,9 @@ serverSocket.listen(1)
 
 
 
+#ACCESS WEBISTE ON http://127.0.0.1  (or ipv4 here instead of 127.0.0.1) :6789/simpleWeb.html or http://127.0.0.1 (or ipv4 instead as well):6789/index.html for 404 page
+                
+    #http://127.0.0.1:6789/simpleWeb.html
 
 while True:
     #Establish the connection
